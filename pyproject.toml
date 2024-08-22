@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "stockmarket"
+version = "0.1.0"
+description = "\"Stock Market Analysis\""
+authors = ["Sebastian Carrillo Mejia <sebastian.carrillo1@udea.edu.co>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+streamlit = "^1.37.1"
+plotly = "^5.23.0"
+numpy = "^2.1.0"
+pandas = "^2.2.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
