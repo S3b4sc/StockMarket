@@ -14,9 +14,9 @@ class data:
     def importSave(self):
         os.makedirs(self.savingRoute, exist_ok=True)
         
-        #with pd.HDFStore(self.savingRoute + self.name, mode='w') as store:
-        #    for stock in self.companyList:
-        #        store.put(stock,yf.download(stock, start=self.start, end=self.end).reset_index(), format='table')
+        with pd.HDFStore(self.savingRoute + self.name, mode='w') as store:
+            for stock in self.companyList:
+                store.put(stock,yf.download(stock, start=self.start, end=self.end).reset_index(), format='table')
     
 
         
