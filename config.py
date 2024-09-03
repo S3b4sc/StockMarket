@@ -7,6 +7,6 @@ RFContext = {
         'savingRoute': 'data/randomForestData/',
         'fileName': 'randomDorestData.h5',
         'companyList': ['AAPL', 'GOOG', 'MSFT', 'AMZN'],
-        'startTime': datetime.now() - relativedelta(years=3),
+        'startTime': datetime.now() - relativedelta(years=5),
         'endTime': datetime.now()
     }
