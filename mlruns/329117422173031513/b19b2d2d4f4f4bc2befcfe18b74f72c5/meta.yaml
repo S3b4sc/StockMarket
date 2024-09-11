@@ -1,0 +1,15 @@
+artifact_uri: file:///home/sebastian/Desktop/For_studyng/Projects/StockMarket/mlruns/329117422173031513/b19b2d2d4f4f4bc2befcfe18b74f72c5/artifacts
+end_time: 1726013235252
+entry_point_name: ''
+experiment_id: '329117422173031513'
+lifecycle_stage: active
+run_id: b19b2d2d4f4f4bc2befcfe18b74f72c5
+run_name: LSTMStock4
+run_uuid: b19b2d2d4f4f4bc2befcfe18b74f72c5
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726013232131
+status: 3
+tags: []
+user_id: sebastian
