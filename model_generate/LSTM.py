@@ -11,14 +11,18 @@ from keras.optimizers import Adam
 
 
 class LSTM():
-    def __init__(self, route:str, company:str, trainDataPercentage:float, setimeStep:int, epochs:int, batch_size:int, lr:float) -> None:
-        self.route = route
+    def __init__(self,load_route:str,company:str, trainDataPercentage:float, setimeStep:int, epochs:int, batch_size:int, lr:float) -> None:
+        self.load_route = load_route
         self.company = company
         self.trainDataPercentage = trainDataPercentage
         self.setimeStep = setimeStep
         self.epochs = epochs
         self.batch_size = batch_size
         self.lr = lr
+        
+    def load_data(self):
+        data = pd.read_hdf(self.load_route,self.company)
+        return data
         
     def process_sequences(self):
         
@@ -53,7 +57,7 @@ class LSTM():
         return x_train,y_train, scaled_data, scaler
     
     
-    def model(self):
+    def model(self,route:str):
         
         # Create model
         model = Sequential()
@@ -97,10 +101,8 @@ class LSTM():
         # Get RMSE
         rmseValue = mean_squared_error(y_true=y_real,y_pred=predictions)
         
-        pass
-    
-    def runLSTM(self):
-        pass
+        model.save(route + '/LSTMModel.h5')
+
     
     
 
