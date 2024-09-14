@@ -10,37 +10,37 @@ from keras.layers import Dense, LSTM, Input
 from keras.optimizers import Adam
 
 
-class LSTM():
-    def __init__(self,load_route:str,company:str, trainDataPercentage:float, setimeStep:int, epochs:int, batch_size:int, lr:float) -> None:
+class LSTMModel():
+    def __init__(self,load_route:str,company:str, trainDataPercentage:float, timeStep:int, epochs:int, batch_size:int, lr:float) -> None:
         self.load_route = load_route
         self.company = company
         self.trainDataPercentage = trainDataPercentage
-        self.setimeStep = setimeStep
+        self.timeStep = timeStep
         self.epochs = epochs
         self.batch_size = batch_size
         self.lr = lr
         
     def load_data(self):
-        data = pd.read_hdf(self.load_route,self.company)
+        data = pd.read_hdf(self.load_route,self.company)['Close'].values
         return data
         
-    def process_sequences(self):
+    def process_sequences(self,data:np.ndarray):
         
-        data = self.load_data()
+        #data = self.load_data()
         
         x = []
         y = []
 
-        for i in range(len(data) - self.setimeStep):
-            x.append(data[i:(i + self.setimeStep)])
-            y.append(data[i + self.setimeStep])
+        for i in range(len(data) - self.timeStep):
+            x.append(data[i:(i + self.timeStep)])
+            y.append(data[i + self.timeStep])
         
         return np.array(x), np.array(y)
         
     
     def load_process_split_data(self):
         # Load the data
-        data = pd.read_hdf(self.route, self.company)[['Close']]
+        data = pd.read_hdf(self.load_route, self.company)[['Close']].values
         
         # Scale the data
         scaler = MinMaxScaler(feature_range=(0,1))
@@ -49,12 +49,12 @@ class LSTM():
         # take training data
         trainDataLen = int(len(data) * self.trainDataPercentage)
         trainData = scaled_data[:trainDataLen, 0]
-        x_train, y_train = self.process_sequences(data=trainData,timeStep=self.timeStep)
+        x_train, y_train = self.process_sequences(data=trainData)
         
         # Reshape data to train (samples, timeSteps, features)
         x_train = x_train.reshape(x_train.shape[0], x_train.shape[1],1)
         
-        return x_train,y_train, scaled_data, scaler
+        return x_train,y_train, scaled_data, scaler, trainDataLen
     
     
     def model(self,route:str):
@@ -75,19 +75,19 @@ class LSTM():
         model.compile(optimizer=optimizer, loss='mean_squared_error')
         
         # Get the data
-        x_train, y_train, scaled_data, scaler = self.load_process_split_data()
+        x_train, y_train, scaled_data, scaler, trainDataLen = self.load_process_split_data()
         
         # train model
         model.fit(x_train, y_train, batch_size=self.batch_size, epochs=self.epochs)
         
         # Test model
         # Create training dataset
-        testData = scaled_data[(self.trainDataLen - self.timeStep):,0]
+        testData = scaled_data[(trainDataLen - self.timeStep):,0]
 
         # Create testing sequences
 
-        #y_test = data[trainDataLen:]
-        x_test,y_test = self.process_sequences(data=testData,timeStep=self.timeStep)
+        #y_test = data[trainData:]
+        x_test,y_test = self.process_sequences(data=testData)
 
 
         #                      (samples, timeSteps, features)
@@ -99,9 +99,11 @@ class LSTM():
         y_real = scaler.inverse_transform(y_test.reshape(-1,1))
 
         # Get RMSE
-        rmseValue = mean_squared_error(y_true=y_real,y_pred=predictions)
+        rmseValue = np.sqrt(mean_squared_error(y_true=y_real,y_pred=predictions))
         
-        model.save(route + '/LSTMModel.h5')
+        model.save(route + '/LSTMModel.keras')
+        
+        return rmseValue
 
     
     

@@ -1,6 +1,8 @@
 import pandas as pd
 import yfinance as yf
 from datetime import datetime
+#from dateutil.relativedelta import relativedelta
+from pandas.tseries.offsets import BDay  # Business Day offset
 import os
 
 class data:
@@ -18,7 +20,12 @@ class data:
             for stock in self.companyList:
                 store.put(stock,yf.download(stock, start=self.start, end=self.end), format='table')
     
-
+    def oneCompanyData(self, company:str,timeStep:int):
+        final = datetime.now()
+        inicio = final - BDay(timeStep+1)
+        data = yf.download(company,start=inicio, end=final)
+        
+        return data
         
         
         

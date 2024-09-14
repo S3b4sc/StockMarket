@@ -27,7 +27,7 @@ trainContextLstm = {
     'load_route': './data/lSTMData/lSTMData.h5',                   
     'company': 'AAPL',
     'trainDataPercentage': 0.95,
-    'setimeStep': 40,
+    'timeStep': 40,
     'epochs': 1,
     'batch_size': 1,
     'lr': 0.01 
