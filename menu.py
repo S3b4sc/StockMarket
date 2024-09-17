@@ -1,4 +1,4 @@
-
+import streamlit as st
     
 def menu():
     message = '''
@@ -15,6 +15,6 @@ def menu():
         4   Predict tomorrows price              
     '''
 
-    option = input(message)
-
-    return option
+    st.write(message)
+    
+    

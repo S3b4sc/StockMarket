@@ -1,7 +1,7 @@
 import pandas as pd
 import yfinance as yf
 from datetime import datetime
-#from dateutil.relativedelta import relativedelta
+from dateutil.relativedelta import relativedelta
 from pandas.tseries.offsets import BDay  # Business Day offset
 import os
 
@@ -22,10 +22,17 @@ class data:
     
     def oneCompanyData(self, company:str,timeStep:int):
         final = datetime.now()
-        inicio = final - BDay(timeStep+1)
+        inicio = final - BDay(timeStep + 1)
         data = yf.download(company,start=inicio, end=final)
         
         return data
         
+    def getDashData(self, company:str):
+
+        final = datetime.now()
+        inicio = final - relativedelta(years=12)
+        data = yf.download(company,start=inicio, end=final)
+
+        return data
         
         
