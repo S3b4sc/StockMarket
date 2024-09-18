@@ -3,13 +3,13 @@
 from data.data_import import data, predData
 from config import RFContext, LSTMContext, trainContextLstm, predContextLstm
 
-from sklearn.preprocessing import MinMaxScaler
-
-from model_generate.LSTM import LSTMModel
-
-import os
-import pandas as pd
-import numpy as np
+#from sklearn.preprocessing import MinMaxScaler
+#
+#from model_generate.LSTM import LSTMModel
+#
+#import os
+#import pandas as pd
+#import numpy as np
 
 
 
@@ -82,6 +82,7 @@ if __name__ == '__main__':
         with st.expander("Setion 2: Model Training Hyperparmas"):
             st.dataframe(dataframe)
     #menu()
+    #In case you want to modofy the code, just re use this, the possible opctions come frm menu.py
     #
     #if st.button('1'):
     #    #os.makedirs(RFContext['savingRoute'], exist_ok=True)

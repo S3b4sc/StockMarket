@@ -1,19 +1,37 @@
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
-import pandas as pd
 import numpy as np
 
 from keras.models import load_model
 import mlflow
 
 class dashboard():
+    """
+    A class to handle stock data visualization and predictions using LSTM model.
+    Attributes:
+        data (DataFrame): Stock data to be used for visualizations and predictions.
+    """
     def __init__(self, data) -> None:
+        
+        """
+        Initializes the dashboard with stock data.
+
+        Args:
+            data (DataFrame): A DataFrame containing the stock data with at least a 'Close' price column.
+        """
         self.data = data
         pass
     
     
     def historicalStock(self):
+        """
+        Plots the historical closing stock prices over time.
+
+        Returns:
+            matplotlib.figure.Figure: A plot showing the stock's closing price over time.
+        """
+        
         plt.style.use('seaborn-v0_8')
         
         fig, ax = plt.subplots()
@@ -27,6 +45,13 @@ class dashboard():
         return fig
     
     def movingAverages(self):
+        """
+        Calculates and plots moving averages (MA) for 10, 20, and 30 days, alongside the closing price.
+
+        Returns:
+            matplotlib.figure.Figure: A plot showing the moving averages and closing price over time.
+        """
+        
         plt.style.use('seaborn-v0_8')
         
         
@@ -51,6 +76,16 @@ class dashboard():
         return fig
     
     def tomorrowPred(self,timeStep:int):
+        """
+        Predicts tomorrow's stock price using a pre-trained LSTM model.
+
+        Args:
+            timeStep (int): The number of previous time steps to use for prediction.
+        
+        Returns:
+            float: The predicted closing price for tomorrow, rounded to two decimal places.
+        """
+        
         # get data to predict 
         x = self.data[['Close']].values
     
@@ -74,9 +109,31 @@ class dashboard():
        #st.write(f'Tomorrow the stock price is expected to be: {np.round(pred,2)} US')
     
     def futurePred(self, company:str,timeStep:int):
+        """
+        Predicts future stock prices using a pre-trained LSTM model and compares predicted and actual values.
+
+        Args:
+            company (str): The name of the company for which future stock prices are predicted.
+            timeStep (int): The number of previous time steps to use for predictions.
+        
+        Returns:
+            tuple: A tuple containing:
+                - matplotlib.figure.Figure: A plot of predicted vs. actual stock prices over time.
+                - pandas.Series: A Series containing information about the production model run (metrics, status, etc.).
+                - float: The Root Mean Squared Error (RMSE) value of the predictions.
+        """
         
         def process_sequences(data:np.ndarray):
+            """
+            Creates sequences of data for LSTM model input.
 
+            Args:
+                data (np.ndarray): The normalized stock data array.
+
+            Returns:
+                tuple: Two arrays, one for the input sequences (X) and one for the output values (y).
+            """
+            
             x = []
             y = []
 
