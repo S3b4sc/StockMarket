@@ -36,3 +36,12 @@ class data:
         return data
         
         
+def predData(company:str, days:int, timeStep:int):
+    
+        final = datetime.now()
+        inicio = final - BDay(days + timeStep)       
+        
+        data = yf.download(company,start=inicio, end=final)
+        return data
+        
+    

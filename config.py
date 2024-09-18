@@ -1,5 +1,6 @@
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from pandas.tseries.offsets import BDay 
 
 
 # Random Forest Data Config to generate data
@@ -32,3 +33,13 @@ trainContextLstm = {
     'batch_size': 1,
     'lr': 0.01 
 }
+
+# LSTM contect for production prediction
+predContextLstm = {            
+    'company': 'AAPL',
+    'days': 20,
+    'timeStep': 40
+}
+
+
+

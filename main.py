@@ -1,7 +1,7 @@
 #from model_generate.randomForest import saveData
 
-from data.data_import import data
-from config import RFContext, LSTMContext, trainContextLstm
+from data.data_import import data, predData
+from config import RFContext, LSTMContext, trainContextLstm, predContextLstm
 
 from sklearn.preprocessing import MinMaxScaler
 
@@ -11,7 +11,7 @@ import os
 import pandas as pd
 import numpy as np
 
-from keras.models import load_model
+
 
 import streamlit as st
 #--------------------------------------------------
@@ -31,7 +31,7 @@ if __name__ == '__main__':
     # Set Dashboard distribution
     
     with st.container():
-        st.write('### Section 1: Close graphs')
+        st.write('#### Section 1: Close graphs')
         
         # Let the user select the time frame
         min_date = LSTMContext['startTime']
@@ -52,22 +52,35 @@ if __name__ == '__main__':
             st.pyplot(figure1)
 
         with col2:
-            st.pyplot(figure2)
+            with st.expander("Setion 1: Moving Averages"):
+                st.pyplot(figure2)
     
-    # With st.container():
-        st.write('### SEction 1: Close claphs')
+    with st.container():
+        st.write('### Section 2: LSTM Model Testing Results')
         
-        col3, col4 = st.columns(2)
 
-        # Import Historical Close data
+        # Import data for predictions
+        info2 = predData(**predContextLstm)
+        
+        # Tomorrow's prediction
+        
         load = data(**LSTMContext)
-        info = load.getDashData(company='AAPL')
+        x = load.oneCompanyData(company=trainContextLstm['company'], timeStep=trainContextLstm['timeStep'])
+        tomorrowPred = dashboard(data=x)
+        
+        
+        value = tomorrowPred.tomorrowPred(timeStep=predContextLstm['timeStep'] )
+        st.write(f'Tomorrow the stock price is expected to be: {value} US')
 
-        historical = dashboard(data=info)
-        figure1 = historical.historicalStock()
+        predData = dashboard(data=info2)
+        figure3,dataframe,rmseValue = predData.futurePred(company=predContextLstm['company'],timeStep=predContextLstm['timeStep'] )
 
-        with col1:
-            st.pyplot(figure1)
+        
+        st.pyplot(figure3)
+        st.markdown(f"<h2 style='text-align: center;'>Current rmse Value: {rmseValue}</h2>", unsafe_allow_html=True)
+        #st.write('Current rmse Value: ', rmseValue)
+        with st.expander("Setion 2: Model Training Hyperparmas"):
+            st.dataframe(dataframe)
     #menu()
     #
     #if st.button('1'):
